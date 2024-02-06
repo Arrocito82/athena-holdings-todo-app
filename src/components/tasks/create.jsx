@@ -20,19 +20,19 @@ function CreateTask(props) {
     }
 
     setValidated(true);
-    let data = {
-      name: name,
-      description: description,
-      status: status,
-      dueDate: dueDate
-    };
-    console.log(data);
-    createTask(data).then((data) => {
-      console.log(data);
-      reset();
-      props.onCreateHandler();
-      props.onHide();
-    });
+    if (validated){
+      createTask({
+        name: name,
+        description: description,
+        status: status,
+        dueDate: dueDate
+      }).then((data) => {
+        console.log(data);
+        reset();
+        props.onCreateHandler();
+        props.onHide();
+      }).catch((error) =>console.log(error));
+    }
 
   };
 
