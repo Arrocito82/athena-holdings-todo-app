@@ -5,7 +5,7 @@ const STATUS=[
         color: '#40A2E3'
     },
     {
-        name:'In Progress',
+        name:'Doing',
         status:'doing',
         color: '#FFB000'
     },
