@@ -44,10 +44,11 @@ const Tasks = () => {
         <CreateTask
             show={createModalShow}
             onHide={() => setCreateModalShow(false)}
+            onCreateHandler={getItems}
         />
         <Container fluid className="py-3">
             <Row>
-                {tasks.map((task, index) => <Col xs={12} md={3}><Task key={index} id={index} name={task.name} description={task.description} status={task.status} dueDate={task.dueDate} /></Col>)}
+                {tasks.map((task, index) => <Col className="py-1"><Task key={index} id={index} name={task.name} description={task.description} status={task.status} dueDate={task.dueDate} /></Col>)}
             </Row>
         </Container>
     </>
