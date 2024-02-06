@@ -1,5 +1,5 @@
 import Dropdown from 'react-bootstrap/Dropdown';
-import { STATUS } from './constants';
+import { STATUS } from '../constants';
 function StatusDropDown(props) {
 
   return (

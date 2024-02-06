@@ -1,10 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { STATUS } from '../constants';
-function TextExample(props) {
+import { STATUS } from '../../constants';
+function Task(props) {
 
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card style={{ width: '18rem' }} key={props.id}>
       <Card.Body>
         <Card.Title>{props.name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">Description</Card.Subtitle>
@@ -26,4 +26,4 @@ function TextExample(props) {
   );
 }
 
-export default TextExample;
+export default Task;

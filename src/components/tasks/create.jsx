@@ -17,10 +17,17 @@ function CreateTask(props) {
             dueDate:dueDate
         };
         console.log(data);
-
         createTask(data).then((data)=>{
             console.log(data);
+            reset();
+            props.onCreateHandler();
         });
+    }
+    const reset=()=>{
+        // setDescription();
+        // setName();
+        // setStatus('todo');
+        // setDueDate();
     }
   return (
     <Modal
@@ -63,7 +70,7 @@ function CreateTask(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onClickHandler}>Save</Button>
-        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={()=>{props.onHide(); reset();}}>Close</Button>
       </Modal.Footer>
     </Modal>
   );
