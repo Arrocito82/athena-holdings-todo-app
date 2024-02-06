@@ -8,7 +8,7 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import Tasks from './components/tasks';
+import Tasks from './components/tasks/index';
 const router = createBrowserRouter([
     {
         path: "/",

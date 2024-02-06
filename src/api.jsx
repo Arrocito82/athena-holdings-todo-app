@@ -1,5 +1,6 @@
 import axios from 'axios';
-const URL_BASE = process.env.API_BASE_URL||'http://localhost:46031';
+const URL_BASE = process.env.REACT_APP_API_BASE_URL;
+axios.defaults.headers['x-api-key '] = process.env.REACT_APP_API_KEY;
 const createManyHiredEmployees=(data)=>{
     return axios.post(URL_BASE+'/api/hiredEmployees/collection', data);
 }
@@ -18,4 +19,18 @@ const getReporte1 = (year)=>{
 const getReporte2 = (year)=>{
     return axios.get(URL_BASE+`/api/hiredEmployees/${year}/reporte2`);
 };
-export {createManyHiredEmployees, createManyDepartments, createManyJobs, getYears, getReporte1, getReporte2};
+const getTasks = (status=null)=>{
+    let params={}
+    if(status){
+        params.status = status;
+    }
+    return axios({
+        method: "get",
+        url: `${URL_BASE}/items`,
+        params: params,
+      });
+};
+const createTask = (data)=>{
+    return axios.post(`${URL_BASE}/items`, data);
+};
+export {getTasks, createTask};
