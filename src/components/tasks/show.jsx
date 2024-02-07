@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { STATUS } from '../../constants';
 import Badge from 'react-bootstrap/Badge';
 import Stack from 'react-bootstrap/Stack';
-import moment from 'moment';
+import moment from 'moment-timezone';
 function Task(props) {
   const getStatusName = () => STATUS.filter(status => status.status === props.status)[0].name;
   const getStatusColor = () => STATUS.filter(status => status.status === props.status)[0].color;
@@ -22,7 +22,7 @@ function Task(props) {
         </Card.Text>
         <Card.Subtitle className="mb-2 text-muted">Due Date</Card.Subtitle>
         <Card.Text>
-          {moment(props.dueDate).format('MMMM Do YYYY, h:mm:ss a')}
+          {moment.utc(props.dueDate).format('MMMM Do, YYYY')}
         </Card.Text>
         <Stack direction="horizontal" gap={1} className="py-2">
           <div>

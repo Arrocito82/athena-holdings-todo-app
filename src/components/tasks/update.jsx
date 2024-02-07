@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { STATUS } from '../../constants';
 import { updateTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
-import moment from 'moment';
+import moment from 'moment-timezone';
 function UpdateTask(props) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
@@ -16,7 +16,7 @@ function UpdateTask(props) {
   useEffect(()=>{
     getTask(props.id).then((data)=>{
       console.log(data);
-      const pickedDate=`${moment(props.dueDate).format('yyyy-MM-DD')}`;
+      const pickedDate=`${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
       setName(data.data.name);
       setDescription(data.data.description);
       setStatus(data.data.status);
@@ -34,7 +34,7 @@ function UpdateTask(props) {
       dueDate: dueDate
     });
     
-    updateTask({
+    updateTask(props.id,{
         name: name,
         description: description,
         status: status,

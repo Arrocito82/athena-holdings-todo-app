@@ -40,7 +40,8 @@ const createTask = (data)=>{
     return axios.post(`${URL_BASE}/items`, data);
 };
 const updateTask = (id, data)=>{
-    return axios.post(`${URL_BASE}/items/${id}`, data);
+    console.log(id);
+    return axios.put(`${URL_BASE}/items/${id}`, data);
 };
 const deleteTask = (id)=>{
     return axios.delete(`${URL_BASE}/items/${id}`);
