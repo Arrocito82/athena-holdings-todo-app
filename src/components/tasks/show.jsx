@@ -9,7 +9,7 @@ function Task(props) {
   const getStatusColor = () => STATUS.filter(status => status.status === props.status)[0].color;
   const {deleteTaskHandler, updateTaskHandler} = props;
   return (
-    <Card style={{ width: '18rem' }} key={props.id}>
+    <Card className='task-card' key={props.id}>
       <Card.Body>
         <Card.Title className='pb-2'>{props.name}</Card.Title>
         {/* <Card.Subtitle className="mb-2 text-muted">Description</Card.Subtitle>
