@@ -7,41 +7,54 @@ import { createTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
 function CreateTask(props) {
   const [dueDate, setDueDate] = useState();
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
-  const [status, setStatus] = useState();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState('todo');
   const [validated, setValidated] = useState(false);
-
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-    if (validated){
-      createTask({
+  const [errors, setErrors] = useState([]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({
+      name: name,
+      description: description,
+      status: status,
+      dueDate: dueDate
+    });
+    
+    createTask({
         name: name,
         description: description,
         status: status,
         dueDate: dueDate
       }).then((data) => {
-        console.log(data);
+        
+        // console.log(data);
         reset();
-        props.onCreateHandler();
+        props.onTaskCreatedHandler();
         props.onHide();
-      }).catch((error) =>console.log(error));
-    }
-
+      }).catch((error) =>{
+        // console.log('Submitted');
+        setErrors(error.response.data.errors);
+        // console.log(error.response.data.errors);
+      }).finally(()=>setValidated(true));
   };
 
   const reset = () => {
-    setDescription();
-    setName();
-    setStatus('todo');
-    setDueDate();
+    setValidated(false);
+    setDescription("");
+    setName("");
+    setStatus("");
+    setDueDate("");
+    setErrors("");
   }
+  const getErrors=(field)=>{
+    // console.log(errors);
+    return errors.filter(error=>error.path===field).map(error=><p>{error.msg}</p>);
+  };
+  const isInvalid=(field)=>{
+    // console.log(field,errors&&errors.filter(error=>error.path===field).length>0);
+    return (errors&&errors.filter(error=>error.path===field).length>0);
+  };
   return (
     <Modal
       {...props}
@@ -49,7 +62,7 @@ function CreateTask(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header >
         <Modal.Title id="contained-modal-title-vcenter">
           Create Task
         </Modal.Title>
@@ -59,26 +72,29 @@ function CreateTask(props) {
           <Form.Group className="mb-3" controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" placeholder="Name" value={name}
-              onChange={(e) => setName(e.target.value)} required />
+              onChange={(e) => setName(e.target.value)} required
+              isInvalid={isInvalid('name')}/>
             <Form.Control.Feedback type="invalid">
-              Please provide a name
+              {errors&&getErrors('name')}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="description">
             <Form.Label>Description</Form.Label>
             <Form.Control as="textarea" rows={3} value={description}
-              onChange={(e) => setDescription(e.target.value)} required />
+              onChange={(e) => setDescription(e.target.value)}
+              isInvalid={isInvalid('description')} required />
               <Form.Control.Feedback type="invalid">
-              Please provide a description
+              {errors&&getErrors('description')}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="status">
             <Form.Label>Status</Form.Label>
-            <Form.Control as="select" onChange={(e) => { setStatus(e.target.value); console.log(e.target.value); }} required>
+            <Form.Select onChange={(e) =>setStatus(e.target.value)}
+             isInvalid={isInvalid('status')} defaultValue={status} required>
               {STATUS.map((status, index) => <option key={index} value={status.status}>{status.name}</option>)}
-            </Form.Control>
+            </Form.Select>
             <Form.Control.Feedback type="invalid">
-              Please select a status
+            {errors&&getErrors('status')}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="dueDate">
@@ -86,15 +102,20 @@ function CreateTask(props) {
             <Form.Control type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
+              isInvalid={isInvalid('dueDate')}
               required
             />
             <Form.Control.Feedback type="invalid">
-              Please pick a date
+            {errors&&getErrors('dueDate')}
             </Form.Control.Feedback>
           </Form.Group>
           <Stack direction="horizontal" gap={1} className="py-2">
-            <div className="ms-auto"><Button type='submit'>Save</Button></div>
-            <div><Button onClick={() => { props.onHide(); reset(); }}>Close</Button></div>
+            <div className="ms-auto">
+              <Button type='submit'>Save</Button>
+              </div>
+            <div>
+              <Button variant="secondary" onClick={() => { props.onHide(); reset(); }}>Cancel</Button>
+              </div>
         </Stack>
         </Form>
       </Modal.Body>

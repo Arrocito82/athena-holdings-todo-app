@@ -2,17 +2,17 @@ const STATUS=[
     {
         name:'To do',
         status:'todo',
-        color: '#40A2E3'
+        color: 'primary'
     },
     {
         name:'Doing',
         status:'doing',
-        color: '#FFB000'
+        color: 'warning'
     },
     {
         name:'Done',
         status:'done',
-        color: '#597E52'
+        color: 'success'
     }
 ]
 export {STATUS};

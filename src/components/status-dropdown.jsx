@@ -9,9 +9,8 @@ function StatusDropDown(props) {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {
-        STATUS.map((item, index)=><Dropdown.Item key={index} onClick={()=>props.onClickHandler(item.status)}>{item.name}</Dropdown.Item>)}
-        
+        {STATUS.map((item, index)=><Dropdown.Item key={index} onClick={()=>props.onClickHandler(item.status)}>{item.name}</Dropdown.Item>)}
+        <Dropdown.Item key={3} onClick={()=>props.onClickHandler(null)}>All</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

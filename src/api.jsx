@@ -30,7 +30,19 @@ const getTasks = (status=null)=>{
         params: params,
       });
 };
+const getTask = (id)=>{
+    return axios({
+        method: "get",
+        url: `${URL_BASE}/items/${id}`
+      });
+};
 const createTask = (data)=>{
     return axios.post(`${URL_BASE}/items`, data);
 };
-export {getTasks, createTask};
+const updateTask = (id, data)=>{
+    return axios.post(`${URL_BASE}/items/${id}`, data);
+};
+const deleteTask = (id)=>{
+    return axios.delete(`${URL_BASE}/items/${id}`);
+};
+export {getTasks, createTask, getTask, updateTask, deleteTask};
