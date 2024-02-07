@@ -6,7 +6,7 @@ import { STATUS } from '../../constants';
 import { updateTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
 import moment from 'moment-timezone';
-function UpdateTask(props) {
+function UpdateTask({onTaskUpdatedHandler,...props}) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -43,7 +43,7 @@ function UpdateTask(props) {
 
       // console.log(data);
       reset();
-      props.onTaskUpdatedHandler();
+      onTaskUpdatedHandler();
       props.onHide();
     }).catch((error) => {
       // console.log('Submitted');
@@ -104,7 +104,6 @@ function UpdateTask(props) {
             <Form.Label>Due Date</Form.Label>
             <Form.Control type="date"
               value={dueDate}
-              defaultValue={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               isInvalid={isInvalid('dueDate')}
               required

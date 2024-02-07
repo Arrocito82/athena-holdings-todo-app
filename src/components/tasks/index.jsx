@@ -64,13 +64,13 @@ const Tasks = () => {
             id={updateTaskId}
             show={updateModalShow}
             onHide={() => setUpdateModalShow(false)}
-            onTaskUpdatedHandler={() => getItems()}
+            onTaskUpdatedHandler={getItems}
         />}
         {deleteTaskId && <DeleteTask
             id={deleteTaskId}
             show={deleteModalShow}
             onHide={() => setDeleteModalShow(false)}
-            onTaskDeletedHandler={() => getItems()}
+            onTaskDeletedHandler={getItems}
         />}
         <Container fluid className="py-3">
             <Row>
@@ -80,8 +80,8 @@ const Tasks = () => {
                         description={task.description}
                         status={task.status}
                         dueDate={task.dueDate}
-                        deleteTaskHandler={deleteTaskHandler} 
-                        updateTaskHandler={updateTaskHandler}/>
+                        deleteTaskHandler={deleteTaskHandler}
+                        updateTaskHandler={updateTaskHandler} />
                 </Col>)}
             </Row>
         </Container>

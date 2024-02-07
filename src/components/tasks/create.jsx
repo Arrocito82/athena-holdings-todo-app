@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { STATUS } from '../../constants';
 import { createTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
-function CreateTask(props) {
+function CreateTask({onTaskCreatedHandler,...props}) {
   const [dueDate, setDueDate] = useState();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -30,7 +30,7 @@ function CreateTask(props) {
 
       // console.log(data);
       reset();
-      props.onTaskCreatedHandler();
+      onTaskCreatedHandler();
       props.onHide();
     }).catch((error) => {
       // console.log('Submitted');

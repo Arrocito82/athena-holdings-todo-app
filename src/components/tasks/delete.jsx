@@ -8,7 +8,7 @@ import Stack from 'react-bootstrap/Stack';
 import moment from 'moment-timezone';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-function DeleteTask(props) {
+function DeleteTask({onTaskDeletedHandler,...props}) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -40,7 +40,7 @@ function DeleteTask(props) {
       // console.log('Submitted');
       setErrors(error.response.data.errors);
       // console.log(error.response.data.errors);
-    }).finally(() => props.onTaskDeletedHandler());
+    }).finally(() => onTaskDeletedHandler());
   };
 
   const reset = () => {
