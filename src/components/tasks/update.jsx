@@ -6,7 +6,7 @@ import { STATUS } from '../../constants';
 import { updateTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
 import moment from 'moment-timezone';
-function UpdateTask({onTaskUpdatedHandler,...props}) {
+function UpdateTask({onTaskUpdatedHandler, id,...props}) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -14,27 +14,27 @@ function UpdateTask({onTaskUpdatedHandler,...props}) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState([]);
   useEffect(() => {
-    getTask(props.id).then((data) => {
-      console.log(data);
+    getTask(id).then((data) => {
+      // console.log(data);
       const pickedDate = `${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
       setName(data.data.name);
       setDescription(data.data.description);
       setStatus(data.data.status);
       setDueDate(pickedDate);
-      console.log(pickedDate);
-      console.log(dueDate);
+      // console.log(pickedDate);
+      // console.log(dueDate);
     });
-  }, [props.id]);
+  }, [id]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      name: name,
-      description: description,
-      status: status,
-      dueDate: dueDate
-    });
+    // console.log({
+    //   name: name,
+    //   description: description,
+    //   status: status,
+    //   dueDate: dueDate
+    // });
 
-    updateTask(props.id, {
+    updateTask(id, {
       name: name,
       description: description,
       status: status,
@@ -53,16 +53,16 @@ function UpdateTask({onTaskUpdatedHandler,...props}) {
   };
 
   const reset = () => {
-    setValidated(false);
     setDescription("");
     setName("");
-    setStatus("");
-    setDueDate(new Date());
-    setErrors("");
+    setStatus('todo');
+    setDueDate(`${moment.utc().format('YYYY-MM-DD')}`);
+    setErrors([]);
+    setValidated(false);
   }
   const getErrors = (field) => {
     // console.log(errors);
-    return errors.filter(error => error.path === field).map(error => <p>{error.msg}</p>);
+    return errors.filter(error => error.path === field).map((error, index) => <p key={index}>{error.msg}</p>);
   };
   const isInvalid = (field) => {
     // console.log(field,errors&&errors.filter(error=>error.path===field).length>0);

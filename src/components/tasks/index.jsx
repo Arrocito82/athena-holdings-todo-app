@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTasks, deleteTask } from "../../api";
+import { getTasks} from "../../api";
 import Task from './show';
 import Button from 'react-bootstrap/Button';
 import StatusDropDown from "../status-dropdown";
@@ -19,7 +19,7 @@ const Tasks = () => {
     const [deleteTaskId, setDeleteTaskId] = useState();
     const onStatusChange = (status) => {
         getItems(status);
-        console.log('Clicked' + status);
+        // console.log('Clicked' + status);
     }
     const getItems = (status = null) => {
         if (status) {
@@ -29,16 +29,18 @@ const Tasks = () => {
             return;
         }
         getTasks().then((data) => {
-            console.log(data.data);
+            // console.log(data.data);
             setTasks(data.data);
             return;
         });
     }
     const deleteTaskHandler = (id) => {
+        console.log(`Delete ${id}`);
         setDeleteTaskId(id);
         setDeleteModalShow(true);
     }
     const updateTaskHandler = (id) => {
+        console.log(`Update ${id}`);
         setUpdateTaskId(id);
         setUpdateModalShow(true);
     }

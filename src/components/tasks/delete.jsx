@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
 import { STATUS } from '../../constants';
 import { deleteTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
 import moment from 'moment-timezone';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-function DeleteTask({onTaskDeletedHandler,...props}) {
+function DeleteTask({onTaskDeletedHandler, id,...props}) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -17,23 +16,23 @@ function DeleteTask({onTaskDeletedHandler,...props}) {
   const getStatusName = () => STATUS.filter(item => item.status === status)[0].name;
   const getStatusColor = () => STATUS.filter(item => item.status === status)[0].color;
   useEffect(() => {
-    console.log(status);
-    getTask(props.id).then((data) => {
-      console.log(data);
+    // console.log(status);
+    getTask(id).then((data) => {
+      // console.log(data);
       const pickedDate = `${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
       setName(data.data.name);
       setDescription(data.data.description);
       setStatus(data.data.status);
       setDueDate(pickedDate);
-      console.log(pickedDate);
-      console.log(dueDate);
+      // console.log(pickedDate);
+      // console.log(dueDate);
     });
-  }, [props.id]);
+  }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    deleteTask(props.id).then((data) => {
-      console.log(data);
+    deleteTask(id).then((data) => {
+      // console.log(data);
       reset();
       props.onHide();
     }).catch((error) => {
@@ -72,7 +71,7 @@ function DeleteTask({onTaskDeletedHandler,...props}) {
             This action cannot be undone, and any associated data will be permanently removed. Please confirm your decision to delete task.
           </span>
         </div>
-        <Card key={props.id}>
+        <Card key={id}>
           <Card.Body>
             <Card.Title className='pb-2'>{name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">Description</Card.Subtitle>

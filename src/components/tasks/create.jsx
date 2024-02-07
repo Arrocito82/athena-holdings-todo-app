@@ -14,12 +14,12 @@ function CreateTask({onTaskCreatedHandler,...props}) {
   const [errors, setErrors] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      name: name,
-      description: description,
-      status: status,
-      dueDate: dueDate
-    });
+    // console.log({
+    //   name: name,
+    //   description: description,
+    //   status: status,
+    //   dueDate: dueDate
+    // });
 
     createTask({
       name: name,
@@ -27,7 +27,6 @@ function CreateTask({onTaskCreatedHandler,...props}) {
       status: status,
       dueDate: dueDate
     }).then((data) => {
-
       // console.log(data);
       reset();
       onTaskCreatedHandler();
@@ -36,20 +35,20 @@ function CreateTask({onTaskCreatedHandler,...props}) {
       // console.log('Submitted');
       setErrors(error.response.data.errors);
       // console.log(error.response.data.errors);
-    }).finally(() => setValidated(true));
+    }).finally(() => setValidated(false));
   };
 
   const reset = () => {
-    setValidated(false);
     setDescription("");
     setName("");
-    setStatus("");
-    setDueDate("");
-    setErrors("");
+    setStatus('todo');
+    setDueDate(new Date());
+    setErrors([]);
+    setValidated(false);
   }
   const getErrors = (field) => {
     // console.log(errors);
-    return errors.filter(error => error.path === field).map(error => <p>{error.msg}</p>);
+    return errors.filter(error => error.path === field).map((error, index) => <p key={index}>{error.msg}</p>);
   };
   const isInvalid = (field) => {
     // console.log(field,errors&&errors.filter(error=>error.path===field).length>0);
