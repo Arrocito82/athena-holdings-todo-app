@@ -25,7 +25,7 @@ const Tasks = () => {
     }
     const getItems = (status = null) => {
         setIsLoading(true);
-        console.log(isLoading);
+        // console.log(isLoading);
         if (status) {
             getTasks(status).then((data) => {
                 setTasks(data.data);
@@ -39,7 +39,7 @@ const Tasks = () => {
             setTasks(data.data);
         }).finally(() => {
             setIsLoading(false);
-            console.log(isLoading);
+            // console.log(isLoading);
         });
         // console.log(isLoading);
     }

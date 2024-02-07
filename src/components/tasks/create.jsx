@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -14,6 +14,7 @@ function CreateTask({ onTaskCreatedHandler, ...props }) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -63,6 +64,9 @@ function CreateTask({ onTaskCreatedHandler, ...props }) {
     // console.log(field,errors&&errors.filter(error=>error.path===field).length>0);
     return (errors && errors.filter(error => error.path === field).length > 0);
   };
+  useEffect(() => {
+    reset();
+  },[props.show]);
   return (
     <Modal
       {...props}
