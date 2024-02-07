@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTasks, deleteTask } from "../../api";
+import { getTasks } from "../../api";
 import Task from './show';
 import Button from 'react-bootstrap/Button';
 import StatusDropDown from "../status-dropdown";

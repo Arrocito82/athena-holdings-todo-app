@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
 import { STATUS } from '../../constants';
 import { deleteTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
@@ -94,7 +93,7 @@ function DeleteTask({ onTaskDeletedHandler, id, ...props }) {
             </Card.Text>
             <Card.Subtitle className="mb-2 text-muted">Due Date</Card.Subtitle>
             <Card.Text>
-              {moment.utc(props.dueDate).format('MMMM Do, YYYY')}
+              {moment.utc(dueDate).format('MMMM Do, YYYY')}
             </Card.Text>
             <Card.Subtitle className="mb-2 text-muted">Status</Card.Subtitle>
             <Card.Text>
