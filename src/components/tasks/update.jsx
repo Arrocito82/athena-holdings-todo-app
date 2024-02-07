@@ -13,10 +13,10 @@ function UpdateTask(props) {
   const [status, setStatus] = useState('todo');
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState([]);
-  useEffect(()=>{
-    getTask(props.id).then((data)=>{
+  useEffect(() => {
+    getTask(props.id).then((data) => {
       console.log(data);
-      const pickedDate=`${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
+      const pickedDate = `${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
       setName(data.data.name);
       setDescription(data.data.description);
       setStatus(data.data.status);
@@ -24,7 +24,7 @@ function UpdateTask(props) {
       console.log(pickedDate);
       console.log(dueDate);
     });
-  },[props.id]);
+  }, [props.id]);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({
@@ -33,23 +33,23 @@ function UpdateTask(props) {
       status: status,
       dueDate: dueDate
     });
-    
-    updateTask(props.id,{
-        name: name,
-        description: description,
-        status: status,
-        dueDate: dueDate
-      }).then((data) => {
-        
-        // console.log(data);
-        reset();
-        props.onTaskUpdatedHandler();
-        props.onHide();
-      }).catch((error) =>{
-        // console.log('Submitted');
-        setErrors(error.response.data.errors);
-        // console.log(error.response.data.errors);
-      }).finally(()=>setValidated(true));
+
+    updateTask(props.id, {
+      name: name,
+      description: description,
+      status: status,
+      dueDate: dueDate
+    }).then((data) => {
+
+      // console.log(data);
+      reset();
+      props.onTaskUpdatedHandler();
+      props.onHide();
+    }).catch((error) => {
+      // console.log('Submitted');
+      setErrors(error.response.data.errors);
+      // console.log(error.response.data.errors);
+    }).finally(() => setValidated(true));
   };
 
   const reset = () => {
@@ -60,13 +60,13 @@ function UpdateTask(props) {
     setDueDate(new Date());
     setErrors("");
   }
-  const getErrors=(field)=>{
+  const getErrors = (field) => {
     // console.log(errors);
-    return errors.filter(error=>error.path===field).map(error=><p>{error.msg}</p>);
+    return errors.filter(error => error.path === field).map(error => <p>{error.msg}</p>);
   };
-  const isInvalid=(field)=>{
+  const isInvalid = (field) => {
     // console.log(field,errors&&errors.filter(error=>error.path===field).length>0);
-    return (errors&&errors.filter(error=>error.path===field).length>0);
+    return (errors && errors.filter(error => error.path === field).length > 0);
   };
   return (
     <Modal
@@ -77,7 +77,7 @@ function UpdateTask(props) {
     >
       <Modal.Header >
         <Modal.Title id="contained-modal-title-vcenter">
-          Create Task
+          Update Task
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -86,9 +86,9 @@ function UpdateTask(props) {
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" placeholder="Name" value={name}
               onChange={(e) => setName(e.target.value)} required
-              isInvalid={isInvalid('name')}/>
+              isInvalid={isInvalid('name')} />
             <Form.Control.Feedback type="invalid">
-              {errors&&getErrors('name')}
+              {errors && getErrors('name')}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="description">
@@ -96,18 +96,8 @@ function UpdateTask(props) {
             <Form.Control as="textarea" rows={3} value={description}
               onChange={(e) => setDescription(e.target.value)}
               isInvalid={isInvalid('description')} required />
-              <Form.Control.Feedback type="invalid">
-              {errors&&getErrors('description')}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="status">
-            <Form.Label>Status</Form.Label>
-            <Form.Select onChange={(e) =>setStatus(e.target.value)}
-             isInvalid={isInvalid('status')} defaultValue={status} required>
-              {STATUS.map((status, index) => <option key={index} value={status.status}>{status.name}</option>)}
-            </Form.Select>
             <Form.Control.Feedback type="invalid">
-            {errors&&getErrors('status')}
+              {errors && getErrors('description')}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="dueDate">
@@ -120,17 +110,27 @@ function UpdateTask(props) {
               required
             />
             <Form.Control.Feedback type="invalid">
-            {errors&&getErrors('dueDate')}
+              {errors && getErrors('dueDate')}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="status">
+            <Form.Label>Status</Form.Label>
+            <Form.Select onChange={(e) => setStatus(e.target.value)}
+              isInvalid={isInvalid('status')} defaultValue={status} required>
+              {STATUS.map((status, index) => <option key={index} value={status.status}>{status.name}</option>)}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              {errors && getErrors('status')}
             </Form.Control.Feedback>
           </Form.Group>
           <Stack direction="horizontal" gap={1} className="py-2">
             <div className="ms-auto">
-              <Button type='submit'>Save</Button>
-              </div>
-            <div>
               <Button variant="secondary" onClick={() => { props.onHide(); reset(); }}>Cancel</Button>
-              </div>
-        </Stack>
+            </div>
+            <div>
+              <Button variant="success" type='submit'>Update</Button>
+            </div>
+          </Stack>
         </Form>
       </Modal.Body>
     </Modal>

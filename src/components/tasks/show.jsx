@@ -16,13 +16,13 @@ function Task(props) {
         <Card.Text>
           {props.description}
         </Card.Text> */}
-        <Card.Subtitle className="mb-2 text-muted">Status</Card.Subtitle>
-        <Card.Text>
-          <Badge bg={getStatusColor()}>{getStatusName()}</Badge>
-        </Card.Text>
         <Card.Subtitle className="mb-2 text-muted">Due Date</Card.Subtitle>
         <Card.Text>
           {moment.utc(props.dueDate).format('MMMM Do, YYYY')}
+        </Card.Text>
+        <Card.Subtitle className="mb-2 text-muted">Status</Card.Subtitle>
+        <Card.Text>
+          <Badge bg={getStatusColor()}>{getStatusName()}</Badge>
         </Card.Text>
         <Stack direction="horizontal" gap={1} className="py-2">
           <div>

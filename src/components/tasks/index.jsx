@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import StatusDropDown from "../status-dropdown";
 import CreateTask from "./create";
 import UpdateTask from "./update";
+import DeleteTask from "./delete";
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -12,8 +13,10 @@ import Col from 'react-bootstrap/Col';
 const Tasks = () => {
     const [createModalShow, setCreateModalShow] = useState(false);
     const [updateModalShow, setUpdateModalShow] = useState(false);
+    const [deleteModalShow, setDeleteModalShow] = useState(false);
     const [tasks, setTasks] = useState([]);
-    const [updateTaskId, setUpdateTaskId] = useState()
+    const [updateTaskId, setUpdateTaskId] = useState();
+    const [deleteTaskId, setDeleteTaskId] = useState();
     const onStatusChange = (status) => {
         getItems(status);
         console.log('Clicked' + status);
@@ -32,7 +35,8 @@ const Tasks = () => {
         });
     }
     const deleteTaskHandler = (id) => {
-        deleteTask(id).then((data) => console.log(data)).catch((err) => console.log(err)).finally(() => getItems());
+        setDeleteTaskId(id);
+        setDeleteModalShow(true);
     }
     const updateTaskHandler = (id) => {
         setUpdateTaskId(id);
@@ -61,6 +65,12 @@ const Tasks = () => {
             show={updateModalShow}
             onHide={() => setUpdateModalShow(false)}
             onTaskUpdatedHandler={() => getItems()}
+        />}
+        {deleteTaskId && <DeleteTask
+            id={deleteTaskId}
+            show={deleteModalShow}
+            onHide={() => setDeleteModalShow(false)}
+            onTaskDeletedHandler={() => getItems()}
         />}
         <Container fluid className="py-3">
             <Row>
