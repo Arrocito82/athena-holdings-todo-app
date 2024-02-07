@@ -8,39 +8,52 @@ import Stack from 'react-bootstrap/Stack';
 import moment from 'moment-timezone';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-function DeleteTask({onTaskDeletedHandler,...props}) {
+import { MutatingDots } from 'react-loader-spinner';
+function DeleteTask({ onTaskDeletedHandler, id, ...props }) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState('todo');
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const getStatusName = () => STATUS.filter(item => item.status === status)[0].name;
   const getStatusColor = () => STATUS.filter(item => item.status === status)[0].color;
   useEffect(() => {
-    console.log(status);
-    getTask(props.id).then((data) => {
-      console.log(data);
+    // console.log(status);
+    setIsLoading(true);
+    getTask(id).then((data) => {
+      // console.log(isLoading);
+      // console.log(data);
       const pickedDate = `${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
       setName(data.data.name);
       setDescription(data.data.description);
       setStatus(data.data.status);
       setDueDate(pickedDate);
-      console.log(pickedDate);
-      console.log(dueDate);
+      // console.log(pickedDate);
+      // console.log(dueDate);
+    }).finally(() => {
+      setIsLoading(false);
+      // console.log(isLoading);
     });
-  }, [props.id]);
+  }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    deleteTask(props.id).then((data) => {
-      console.log(data);
+    setIsLoading(true);
+    // console.log(isLoading);
+    deleteTask(id).then((data) => {
+      // console.log(data);
       reset();
       props.onHide();
     }).catch((error) => {
       // console.log('Submitted');
       setErrors(error.response.data.errors);
       // console.log(error.response.data.errors);
-    }).finally(() => onTaskDeletedHandler());
+    }).finally(() => {
+      onTaskDeletedHandler();
+      setIsLoading(false);
+      // console.log(isLoading);
+    });
   };
 
   const reset = () => {
@@ -90,6 +103,19 @@ function DeleteTask({onTaskDeletedHandler,...props}) {
           </Card.Body>
         </Card>
         <Stack direction="horizontal" gap={1} className="py-2">
+          <div>
+            <MutatingDots
+              visible={isLoading}
+              height="100"
+              width="100"
+              color="#4fa94d"
+              secondaryColor="#4fa94d"
+              radius="12.5"
+              ariaLabel="mutating-dots-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          </div>
           <div className="ms-auto">
             <Button variant="secondary" onClick={() => { props.onHide(); reset(); }}>Cancel</Button>
           </div>

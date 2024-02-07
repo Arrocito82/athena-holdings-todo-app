@@ -5,15 +5,19 @@ import Form from 'react-bootstrap/Form';
 import { STATUS } from '../../constants';
 import { createTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
-function CreateTask({onTaskCreatedHandler,...props}) {
+import { MutatingDots } from 'react-loader-spinner';
+function CreateTask({ onTaskCreatedHandler, ...props }) {
   const [dueDate, setDueDate] = useState();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState('todo');
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    // console.log(isLoading);
     console.log({
       name: name,
       description: description,
@@ -36,7 +40,11 @@ function CreateTask({onTaskCreatedHandler,...props}) {
       // console.log('Submitted');
       setErrors(error.response.data.errors);
       // console.log(error.response.data.errors);
-    }).finally(() => setValidated(true));
+    }).finally(() => {
+      setValidated(true);
+      setIsLoading(false);
+      // console.log(isLoading);
+    });
   };
 
   const reset = () => {
@@ -110,6 +118,19 @@ function CreateTask({onTaskCreatedHandler,...props}) {
             </Form.Control.Feedback>
           </Form.Group>
           <Stack direction="horizontal" gap={1} className="py-2">
+            <div>
+              <MutatingDots
+                visible={isLoading}
+                height="100"
+                width="100"
+                color="#4fa94d"
+                secondaryColor="#4fa94d"
+                radius="12.5"
+                ariaLabel="mutating-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            </div>
             <div className="ms-auto">
               <Button variant="secondary" onClick={() => { props.onHide(); reset(); }}>Cancel</Button>
             </div>

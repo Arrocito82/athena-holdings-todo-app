@@ -10,6 +10,7 @@ import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { MutatingDots } from 'react-loader-spinner';
 const Tasks = () => {
     const [createModalShow, setCreateModalShow] = useState(false);
     const [updateModalShow, setUpdateModalShow] = useState(false);
@@ -17,22 +18,30 @@ const Tasks = () => {
     const [tasks, setTasks] = useState([]);
     const [updateTaskId, setUpdateTaskId] = useState();
     const [deleteTaskId, setDeleteTaskId] = useState();
+    const [isLoading, setIsLoading] = useState(false);
     const onStatusChange = (status) => {
         getItems(status);
-        console.log('Clicked' + status);
+        // console.log('Clicked' + status);
     }
     const getItems = (status = null) => {
+        setIsLoading(true);
+        console.log(isLoading);
         if (status) {
             getTasks(status).then((data) => {
                 setTasks(data.data);
+            }).finally(() => {
+                setIsLoading(false);
+                console.log(isLoading);
             });
-            return;
         }
         getTasks().then((data) => {
             console.log(data.data);
             setTasks(data.data);
-            return;
+        }).finally(() => {
+            setIsLoading(false);
+            console.log(isLoading);
         });
+        // console.log(isLoading);
     }
     const deleteTaskHandler = (id) => {
         setDeleteTaskId(id);
@@ -46,10 +55,24 @@ const Tasks = () => {
         getItems();
     }, []);
     return <>
+
         <div className="h1">
             Tasks
         </div>
         <Stack direction="horizontal" gap={1} className="py-2">
+            <div>
+                <MutatingDots
+                    visible={isLoading}
+                    height="100"
+                    width="100"
+                    color="#4fa94d"
+                    secondaryColor="#4fa94d"
+                    radius="12.5"
+                    ariaLabel="mutating-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />
+            </div>
             <div className="ms-auto"><Button variant="outline-primary" onClick={() => setCreateModalShow(true)}>
                 Add Task
             </Button></div>
@@ -83,7 +106,7 @@ const Tasks = () => {
                         deleteTaskHandler={deleteTaskHandler}
                         updateTaskHandler={updateTaskHandler} />
                 </Col>)}
-                {tasks.length ===0&&<Col key={1} className="py-1 fs-3">Currently, there are no tasks created. Feel free to initiate a new task to get started</Col>}
+                {tasks.length === 0 && <Col key={1} className="py-1 fs-3">Currently, there are no tasks created. Feel free to initiate a new task to get started</Col>}
             </Row>
         </Container>
     </>

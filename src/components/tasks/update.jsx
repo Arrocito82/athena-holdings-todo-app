@@ -6,33 +6,42 @@ import { STATUS } from '../../constants';
 import { updateTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
 import moment from 'moment-timezone';
-function UpdateTask({onTaskUpdatedHandler,...props}) {
+import { MutatingDots } from 'react-loader-spinner';
+function UpdateTask({ onTaskUpdatedHandler, ...props }) {
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState('todo');
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
+    // console.log(isLoading);
     getTask(props.id).then((data) => {
-      console.log(data);
+      // console.log(data);
       const pickedDate = `${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
       setName(data.data.name);
       setDescription(data.data.description);
       setStatus(data.data.status);
       setDueDate(pickedDate);
-      console.log(pickedDate);
-      console.log(dueDate);
+      // console.log(pickedDate);
+      // console.log(dueDate);
+    }).finally(() => {
+      setIsLoading(false);
+      // console.log(isLoading);
     });
   }, [props.id]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      name: name,
-      description: description,
-      status: status,
-      dueDate: dueDate
-    });
+    setIsLoading(true);
+    // console.log(isLoading);
+    // console.log({
+    //   name: name,
+    //   description: description,
+    //   status: status,
+    //   dueDate: dueDate
+    // });
 
     updateTask(props.id, {
       name: name,
@@ -49,7 +58,11 @@ function UpdateTask({onTaskUpdatedHandler,...props}) {
       // console.log('Submitted');
       setErrors(error.response.data.errors);
       // console.log(error.response.data.errors);
-    }).finally(() => setValidated(true));
+    }).finally(() => {
+      setValidated(true);
+      setIsLoading(false);
+      // console.log(isLoading);
+    });
   };
 
   const reset = () => {
@@ -123,6 +136,19 @@ function UpdateTask({onTaskUpdatedHandler,...props}) {
             </Form.Control.Feedback>
           </Form.Group>
           <Stack direction="horizontal" gap={1} className="py-2">
+            <div>
+              <MutatingDots
+                visible={isLoading}
+                height="100"
+                width="100"
+                color="#4fa94d"
+                secondaryColor="#4fa94d"
+                radius="12.5"
+                ariaLabel="mutating-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            </div>
             <div className="ms-auto">
               <Button variant="secondary" onClick={() => { props.onHide(); reset(); }}>Cancel</Button>
             </div>
