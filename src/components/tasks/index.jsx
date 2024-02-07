@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTasks } from "../../api";
+import { getTasks, deleteTask } from "../../api";
 import Task from './show';
 import Button from 'react-bootstrap/Button';
 import StatusDropDown from "../status-dropdown";
@@ -31,8 +31,12 @@ const Tasks = () => {
             return;
         });
     }
-    const deleteTaskHandler =(id)=>{
-
+    const deleteTaskHandler = (id) => {
+        deleteTask(id).then((data) => console.log(data)).catch((err) => console.log(err)).finally(() => getItems());
+    }
+    const updateTaskHandler = (id) => {
+        setUpdateTaskId(id);
+        setUpdateModalShow(true);
     }
     useEffect(() => {
         getItems();
@@ -42,7 +46,7 @@ const Tasks = () => {
             Tasks
         </div>
         <Stack direction="horizontal" gap={1} className="py-2">
-            <div className="ms-auto"><Button variant="primary" onClick={() => setCreateModalShow(true)}>
+            <div className="ms-auto"><Button variant="outline-primary" onClick={() => setCreateModalShow(true)}>
                 Add Task
             </Button></div>
             <div><StatusDropDown onClickHandler={onStatusChange} /></div>
@@ -52,15 +56,23 @@ const Tasks = () => {
             onHide={() => setCreateModalShow(false)}
             onTaskCreatedHandler={getItems}
         />
-        <UpdateTask
+        {updateTaskId && <UpdateTask
             id={updateTaskId}
             show={updateModalShow}
-            onHide={() => setCreateModalShow(false)}
-            onUpdateHandler={()=>getItems()}
-        />
+            onHide={() => setUpdateModalShow(false)}
+            onTaskUpdatedHandler={() => getItems()}
+        />}
         <Container fluid className="py-3">
             <Row>
-                {tasks.map((task, index) => <Col key={index} className="py-1"><Task id={task.id} name={task.name} description={task.description} status={task.status} dueDate={task.dueDate} onDeleteHandler={deleteTaskHandler}/></Col>)}
+                {tasks.map((task, index) => <Col key={index} className="py-1">
+                    <Task id={task.id}
+                        name={task.name}
+                        description={task.description}
+                        status={task.status}
+                        dueDate={task.dueDate}
+                        deleteTaskHandler={deleteTaskHandler} 
+                        updateTaskHandler={updateTaskHandler}/>
+                </Col>)}
             </Row>
         </Container>
     </>
