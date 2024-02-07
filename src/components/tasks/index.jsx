@@ -83,6 +83,7 @@ const Tasks = () => {
                         deleteTaskHandler={deleteTaskHandler}
                         updateTaskHandler={updateTaskHandler} />
                 </Col>)}
+                {tasks.length ===0&&<Col key={1} className="py-1 fs-3">Currently, there are no tasks created. Feel free to initiate a new task to get started</Col>}
             </Row>
         </Container>
     </>
