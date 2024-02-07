@@ -1,17 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { STATUS } from '../../constants';
-import { createTask } from '../../api';
+import { updateTask, getTask } from '../../api';
 import Stack from 'react-bootstrap/Stack';
-function CreateTask({onTaskCreatedHandler,...props}) {
-  const [dueDate, setDueDate] = useState();
+import moment from 'moment-timezone';
+function UpdateTask({onTaskUpdatedHandler,...props}) {
+  const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState('todo');
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState([]);
+  useEffect(() => {
+    getTask(props.id).then((data) => {
+      console.log(data);
+      const pickedDate = `${moment.utc(data.data.dueDate).format('YYYY-MM-DD')}`;
+      setName(data.data.name);
+      setDescription(data.data.description);
+      setStatus(data.data.status);
+      setDueDate(pickedDate);
+      console.log(pickedDate);
+      console.log(dueDate);
+    });
+  }, [props.id]);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({
@@ -21,7 +34,7 @@ function CreateTask({onTaskCreatedHandler,...props}) {
       dueDate: dueDate
     });
 
-    createTask({
+    updateTask(props.id, {
       name: name,
       description: description,
       status: status,
@@ -30,7 +43,7 @@ function CreateTask({onTaskCreatedHandler,...props}) {
 
       // console.log(data);
       reset();
-      onTaskCreatedHandler();
+      onTaskUpdatedHandler();
       props.onHide();
     }).catch((error) => {
       // console.log('Submitted');
@@ -44,7 +57,7 @@ function CreateTask({onTaskCreatedHandler,...props}) {
     setDescription("");
     setName("");
     setStatus("");
-    setDueDate("");
+    setDueDate(new Date());
     setErrors("");
   }
   const getErrors = (field) => {
@@ -64,7 +77,7 @@ function CreateTask({onTaskCreatedHandler,...props}) {
     >
       <Modal.Header >
         <Modal.Title id="contained-modal-title-vcenter">
-          Create Task
+          Update Task
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -114,7 +127,7 @@ function CreateTask({onTaskCreatedHandler,...props}) {
               <Button variant="secondary" onClick={() => { props.onHide(); reset(); }}>Cancel</Button>
             </div>
             <div>
-              <Button type='submit'>Create</Button>
+              <Button variant="success" type='submit'>Update</Button>
             </div>
           </Stack>
         </Form>
@@ -123,4 +136,4 @@ function CreateTask({onTaskCreatedHandler,...props}) {
   );
 }
 
-export default CreateTask;
+export default UpdateTask;
