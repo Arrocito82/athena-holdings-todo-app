@@ -31,8 +31,9 @@ const Tasks = () => {
                 setTasks(data.data);
             }).finally(() => {
                 setIsLoading(false);
-                console.log(isLoading);
+                // console.log(isLoading);
             });
+            return;
         }
         getTasks().then((data) => {
             console.log(data.data);
@@ -41,6 +42,7 @@ const Tasks = () => {
             setIsLoading(false);
             // console.log(isLoading);
         });
+        return;
         // console.log(isLoading);
     }
     const deleteTaskHandler = (id) => {
